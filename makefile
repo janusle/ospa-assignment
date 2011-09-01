@@ -1,5 +1,5 @@
 CC=gcc
-FLAGS=-ansi -pedantic -g
+FLAGS=-ansi -pedantic
 all:part1 part2
 
 part1: 

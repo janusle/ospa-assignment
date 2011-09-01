@@ -109,7 +109,17 @@ main( int argc , const char** argv )
                err_quit("dup error\n");
              }
              /* redirect ouput to file */
-
+             
+             fd = open( FILENAME, O_WRONLY | O_CREAT | O_TRUNC,
+                      S_IRUSR | S_IRGRP | S_IWGRP | S_IWUSR );
+             if( fd == -1 )
+               err_quit("file open error\n");
+   
+             if( dup2(fd, STDOUT_FILENO) == -1 )
+             {
+                err_quit("dup error\n"); 
+             }
+            
              exec( argv[3] );
            }
          }
