@@ -8,6 +8,7 @@
 
 #define ARVMIN 2
 #define FILENAME "result"
+#define NUMPROCESS 3
 
 int 
 main( int argc , const char** argv )
@@ -15,6 +16,8 @@ main( int argc , const char** argv )
    pid_t pid;
    int fd0[2], fd1[2], i, fd;
    int result;   
+   int pids[NUMPROCESS];
+
    if( argc < ARVMIN )
    {
      usage();
@@ -27,6 +30,7 @@ main( int argc , const char** argv )
    if( pipe(fd1) < 0 )
      err_quit("pipe error\n");
 
+   i = 0;
    if( (pid = fork() ) < 0 )
      err_quit("fork error\n");
 
@@ -61,8 +65,13 @@ main( int argc , const char** argv )
 
       exec( argv[1] );
    }
+   else if( argc == 2 ) /* only one argument, parent */
+   {
+     pids[i++] = pid; 
+   }
    else if( argc > 2 ) /* parent */
    {
+      pids[i++] = pid; /* record pid of process 1 */
 
       pid = fork();
   
@@ -106,6 +115,8 @@ main( int argc , const char** argv )
       }
       else if ( pid > 0 ) /* parent */
       {
+         pids[i++] = pid; /* record pid of process 2 */
+
          if( argc > 3 )
          {
            pid = fork(); 
@@ -134,6 +145,8 @@ main( int argc , const char** argv )
             
              exec( argv[3] );
            }
+
+           pids[i++] = pid; /* record pid of process 2 */
          }
 
       }
@@ -146,13 +159,31 @@ main( int argc , const char** argv )
    close(fd1[0]);
    close(fd1[1]);
 
-   for( i=1; i<argc; i++ )
+
+   for( i=0; i<argc-1; i++ )
    {
-      /*
-      printf("%d\n", wait(&result) );
-      printf("%d\n", result);
-      */
-      wait(NULL);
+      pid = wait(&result);
+      
+      /* check if process is process one */
+      if( pid == pids[0] )
+      {
+        printf("Process(1) with a pid of %d terminated with code %d\n",
+                pid, result);
+      }
+
+      /* check if process is process two */
+      if( pid == pids[1] )
+      {
+        printf("Process(2) with a pid of %d terminated with code %d\n",
+                pid, result);
+      }
+
+      /* check if process is process three */
+      if( pid == pids[2] )
+      {
+        printf("Process(3) with a pid of %d terminated with code %d\n",
+                pid, result);
+      }
    }
 
    return EXIT_SUCCESS;
