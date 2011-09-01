@@ -32,7 +32,6 @@ main( int argc , const char** argv )
 
    if( pid == 0 )  /* process 1 */
    {
-      fprintf(stderr, "Process 1 %d\n", getpid() );
 
       if( dup2(fd0[1], STDOUT_FILENO) == -1 )
       {
@@ -55,7 +54,6 @@ main( int argc , const char** argv )
       if( pid == 0 )  /* process 2 */
       {
 
-         fprintf(stderr ,"Process 2 %d\n", getpid() );
          
          if( dup2(fd0[0], STDIN_FILENO) != STDIN_FILENO )
          {
@@ -102,7 +100,6 @@ main( int argc , const char** argv )
              close(fd0[1]);
              close(fd1[1]); /* close pipes */
              
-             fprintf(stderr, "Process 3 %d\n", getpid() );
 
              if( dup2(fd1[0], STDIN_FILENO) == -1 )
              {

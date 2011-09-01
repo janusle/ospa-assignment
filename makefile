@@ -1,12 +1,12 @@
 CC=gcc
 FLAGS=-ansi -pedantic
-all:part1 part2
+all:progOne launcher
 
-part1: 
-	$(CC) -o part1 part1.c $(FLAGS)
+progOne: 
+	$(CC) -o progOne progOne.c $(FLAGS)
 
-part2: error.o utility.o
-	$(CC) -o part2 part2.c error.o utility.o $(FLAGS)
+launcher: error.o utility.o
+	$(CC) -o launcher launcher.c error.o utility.o $(FLAGS)
 
 utility.o:
 	$(CC) -c utility.c $(FLAGS) 
@@ -15,6 +15,6 @@ error.o:
 	$(CC) -c error.c $(FLAGS)
 
 clean:
-	-rm part1 part2
+	-rm progOne launcher
 	-rm *.o
 	-rm result
