@@ -1,9 +1,13 @@
 #include<unistd.h>
 #include<string.h>
 #include<ctype.h>
+#include<stdio.h>
+#include<fcntl.h>
 
+#include "error.h"
 #define TMPLEN 20
-int exec( char* command );
+#define ARGNUM 20
 
-char* basename( char* pathname );
+void exec( const char* command );
+
 
