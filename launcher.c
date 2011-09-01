@@ -6,7 +6,7 @@
 #include "utility.h"
 
 
-#define ARVMIN 3
+#define ARVMIN 2
 #define FILENAME "result"
 
 int 
@@ -37,17 +37,32 @@ main( int argc , const char** argv )
       {
         err_quit("dup error\n"); 
       }
-      
+     
+      if( argc == 2 )
+      { 
+            /* redirect stdout to file */
+            fd = open( FILENAME, O_WRONLY | O_CREAT | O_TRUNC,
+                     S_IRUSR | S_IRGRP | S_IWGRP | S_IWUSR );
+            if( fd == -1 )
+             err_quit("file open error\n");
+   
+            if( dup2(fd, STDOUT_FILENO) == -1 )
+            {
+              err_quit("dup error\n"); 
+            }
+            
+      }
+
+      /* close pipes */
       close(fd0[0]); 
       close(fd0[1]);
       close(fd1[0]);
-      close(fd1[1]); /* close pipes */
+      close(fd1[1]); 
 
       exec( argv[1] );
    }
-   else /* parent */
+   else if( argc > 2 ) /* parent */
    {
-      /*  wait(NULL);*/
 
       pid = fork();
   
@@ -121,15 +136,15 @@ main( int argc , const char** argv )
            }
          }
 
-         /* close unused pipes */
-         close(fd0[0]);
-         close(fd0[1]);
-         close(fd1[0]);
-         close(fd1[1]);
       }
    }
 
-
+   
+   /* close unused pipes */
+   close(fd0[0]);
+   close(fd0[1]);
+   close(fd1[0]);
+   close(fd1[1]);
 
    for( i=1; i<argc; i++ )
    {

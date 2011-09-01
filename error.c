@@ -8,7 +8,7 @@ err_quit( const char *st )
 { 
   if( errno != 0 )
   {
-    perror("");
+    perror("launcher");
   }
   write( STDERR_FILENO, st, strlen(st) );
   exit(EXIT_FAILURE);

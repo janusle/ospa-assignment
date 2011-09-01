@@ -17,7 +17,7 @@ main()
 
   if( (pid = fork()) <0 )
   {
-    write(STDOUT_FILENO, errmsg, strlen(errmsg) );
+    perror("fork error");  
     exit(EXIT_FAILURE);
   }
   else if( pid == 0 ) /* child */

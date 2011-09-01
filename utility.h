@@ -1,3 +1,6 @@
+#ifndef UTILITY_H
+#define UTILITY_H
+
 #include<unistd.h>
 #include<string.h>
 #include<ctype.h>
@@ -10,4 +13,4 @@
 
 void exec( const char* command );
 
-
+#endif
