@@ -6,8 +6,6 @@
 
 #define TMPLEN 200
 
-
-
 int 
 main()
 {
@@ -31,13 +29,13 @@ main()
     write( STDOUT_FILENO, tmp, strlen(tmp) );
 
     sprintf(tmp, "Child again, the address of y before assignment is %p \n",
-            &y);
+            (void*)&y);
     write( STDOUT_FILENO, tmp, strlen(tmp) );
 
     y = 20 * x;
  
     sprintf(tmp, "Child again, the address of y after assignment is %p \n",
-            &y);
+            (void*)&y);
     write( STDOUT_FILENO, tmp, strlen(tmp) );
 
     sprintf(tmp, "Child: the value of y is %d \n", y );
@@ -52,7 +50,7 @@ main()
    sprintf(tmp, "Parent again, my child\'s PID is %d \n", pid );
    write( STDOUT_FILENO, tmp, strlen(tmp) );
     
-   sprintf(tmp, "Parent again, the address of y is %p \n", &y ); 
+   sprintf(tmp, "Parent again, the address of y is %p \n", (void*)&y ); 
    write( STDOUT_FILENO, tmp, strlen(tmp) );
 
    pid = wait( &result );
@@ -60,7 +58,7 @@ main()
    sprintf(tmp,"The child process with a pid of %d terminated with code %d \n"
             , pid, result );
    write( STDOUT_FILENO, tmp, strlen(tmp) );
-    
+
   }
   return 0;
 }
