@@ -1,6 +1,7 @@
 #include<unistd.h>
 #include<string.h>
 #include<stdlib.h>
+#include<sys/stat.h>
 
 #include "error.h"
 #include "utility.h"
