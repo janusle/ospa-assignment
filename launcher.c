@@ -37,11 +37,6 @@ main( int argc , const char** argv )
 
    if( pid == 0 )  /* process 1 */
    {
-
-      if( dup2(fd0[1], STDOUT_FILENO) == -1 )
-      {
-        err_quit("dup error\n"); 
-      }
      
       if( argc == 2 )
       { 
@@ -56,6 +51,10 @@ main( int argc , const char** argv )
               err_quit("dup error\n"); 
             }
             
+      }
+      else if( dup2(fd0[1], STDOUT_FILENO) == -1 )
+      {
+        err_quit("dup error\n"); 
       }
 
       /* close pipes */
