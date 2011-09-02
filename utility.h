@@ -8,7 +8,7 @@
 #include<fcntl.h>
 
 #include "error.h"
-#define TMPLEN 20
+#define TMPLEN 100
 #define ARGNUM 20
 
 /* execute command */

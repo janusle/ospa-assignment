@@ -18,6 +18,7 @@ main( int argc , const char** argv )
    pid_t pid;
    int fd0[2], fd1[2], i, fd;
    int result;   
+   char tmp[TMPLEN]; 
    int pids[NUMPROCESS];
    /*fd_set rset;*/
 
@@ -178,22 +179,25 @@ main( int argc , const char** argv )
       /* check if process is process one */
       if( pid == pids[0] )
       {
-        printf("Process(1) with a pid of %d terminated with code %d\n",
+        sprintf(tmp, "Process(1) with a pid of %d terminated with code %d\n",
                 pid, result);
+        write( STDOUT_FILENO, tmp, strlen(tmp));
       }
 
       /* check if process is process two */
       if( pid == pids[1] )
       {
-        printf("Process(2) with a pid of %d terminated with code %d\n",
+        sprintf(tmp, "Process(2) with a pid of %d terminated with code %d\n",
                 pid, result);
+        write( STDOUT_FILENO, tmp, strlen(tmp));
       }
 
       /* check if process is process three */
       if( pid == pids[2] )
       {
-        printf("Process(3) with a pid of %d terminated with code %d\n",
+        sprintf(tmp, "Process(3) with a pid of %d terminated with code %d\n",
                 pid, result);
+        write( STDOUT_FILENO, tmp, strlen(tmp));
       }
    }
 
