@@ -10,6 +10,7 @@
 #define ARVMIN 2
 #define FILENAME "result"
 #define NUMPROCESS 3
+#define TIMEOUT 1
 
 int 
 main( int argc , const char** argv )
@@ -18,6 +19,7 @@ main( int argc , const char** argv )
    int fd0[2], fd1[2], i, fd;
    int result;   
    int pids[NUMPROCESS];
+   /*fd_set rset;*/
 
    if( argc < ARVMIN )
    {
@@ -83,7 +85,11 @@ main( int argc , const char** argv )
          {
            err_quit("dup error\n"); 
          }
-        
+     
+         /* wait STDIN_FILENO */        
+         if ( settimeout( STDIN_FILENO, TIMEOUT ) < 0 )
+             err_quit("Error in process 1");
+
          if( argc > 3 ) /* if there is three arguments */
          {
             if( dup2(fd1[1], STDOUT_FILENO) == -1 )/*redirect output to pipe*/
@@ -131,6 +137,11 @@ main( int argc , const char** argv )
              {
                err_quit("dup error\n");
              }
+
+             /* wait STDIN_FILENO */         
+             if ( settimeout( STDIN_FILENO, TIMEOUT ) <= 0 )
+               err_quit("Error in process 2");
+
              /* redirect ouput to file */
              
              fd = open( FILENAME, O_WRONLY | O_CREAT | O_TRUNC,

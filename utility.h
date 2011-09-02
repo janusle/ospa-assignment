@@ -11,6 +11,10 @@
 #define TMPLEN 20
 #define ARGNUM 20
 
+/* execute command */
 void exec( const char* command );
+
+/* set timeout */
+int settimeout( int fd, int sec );
 
 #endif

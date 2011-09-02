@@ -1,5 +1,22 @@
 #include "utility.h"
 
+int
+settimeout( int fd, int sec )
+{
+
+  struct timeval t;
+  fd_set rset;
+
+  t.tv_sec = sec;
+  t.tv_usec = 0;
+  FD_ZERO(&rset);
+  FD_SET(fd, &rset);
+
+  return select( fd + 1, &rset, NULL, NULL, &t );
+
+}
+
+
 void
 exec( const char* command )
 {
