@@ -1,0 +1,84 @@
+Student number: 3262302
+Yallara account: s3262302
+Real Name: Yan Le
+Date: 2/9/2011
+
+Notes about part2
+
+1. launcher redirects final result to a file. The name of file is 'result'
+
+2. When executes launcher, if user give launcher more than three arguments .
+launcher just executes first three ones. 
+
+Flow of execution:
+
+Part1 
+
+1. parent forks a child 
+
+2. parent or child runs( It is decided by kernel )
+
+3. parent prints some information about its 
+   pid, its child's pid ,and address of y, then 
+   waits child return and prints terminated code of child
+
+4. child prints some information about its pid, its parent's
+   pid, address of y. Then does an assignment, prints address of 
+   y again and value of y
+
+About memory:
+
+child is a copy of parent and gets copy of parent's data space, heap and stack. 
+Child modifies value of y, but value of y in parent does not change 
+The value of address of y in parent and child is same. Because child is copy
+of parent. Child gets a copy of parent's data space, heap and stack. Although
+value of address of y in parent and child is same, the actual physical address
+of y is different because parent and child have their own address space.
+
+Part2
+
+1.parent reads program names from command line
+
+2.parent creates two pipes. (fd0[2] and fd1[2])
+
+3.parent forks child1 and record pid of child1.
+
+4.child1 runs. child1 checks argc, if argc equals 2 (there is just one
+program need run), then calls dup2 to redirect stout to file( name of file is 'result')
+otherwise, child1 redirects stout to pipe ( fd0[1] ). At last calls execvp to 
+execute program.
+
+5. parent checks argc, if argc equals 2 , then just waits for child1 and prints terminated
+code of child1. Otherwise, parent forks child 2 and record pid of child2.
+
+6. child2 runs, child2 redirects stdin to pipe( fd0[0] ). Then checks argc, if argc 
+equals 3, it means child2 two is the last child, then redirects stdout to file. Otherwise,
+it redirects stdout to pipe( fd1[1] ). At last, calls execvp to execute program.
+
+7. parent checks argc, if argc equals 3, parent waits for child1 and child2 and prints 
+terminated code of them. Otherwise, parent forks child 3 and records pid of child3.
+
+8. child3 runs, it redirects stdin to pipe( fd1[0] ) and redirects stdout to file. then 
+calls execvp to execute program.
+
+9. parent waits for all childs and prints their terminated code.
+
+Note: Perhaps the flow of part2 is little bit different from real execution. Because
+sequence of running of parent and children is decided by kernel.
+
+About memory:
+
+All children get a copy of parent's data space, heap and stack after fork.
+
+child1 redirects stout to file or pipe ( fd0[1] ). It does not affect parent's stout.
+After calling execvp , the text, data, heap, and stack segments of child are replaced by
+the new program.
+
+child2 redirects stout to file or pipe ( fd1[1] )and redirects stdin to pipe( fd0[0] )
+After calling execvp , the text, data, heap, and stack segments of child are replaced by
+the new program.
+
+child3 redirects stout to file and redirects stdin to pipe( fd1[0] )
+After calling execvp , the text, data, heap, and stack segments of child are replaced by
+the new program.
+
